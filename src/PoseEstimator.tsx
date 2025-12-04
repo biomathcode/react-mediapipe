@@ -249,38 +249,56 @@ export default function PoseEstimator(props: PoseEstimatorOptions) {
 
     return (
         <div className={`mediapipe-pose-estimator ${className} p-2`}>
-            <div className="flex gap-2 items-center">
+
+            <div className="flex-row">
+
                 <button
-                    className="px-3 py-1 rounded-lg border text-sm"
+                    className="btn"
                     onClick={toggleCamera}
                     aria-pressed={streaming}
                 >
                     {streaming ? "Stop Camera" : "Start Camera"}
                 </button>
-                <span className="text-xs text-muted-foreground">{ready ? "Model ready" : "Loading model..."}</span>
+                <span className="status">{ready ? "Model ready" : "Loading model..."}</span>
             </div>
 
-            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="relative bg-black/5 rounded overflow-hidden">
+            <div className="grid">
+                <div style={{
+                    position: 'relative'
+                }}>
+                    {/* VIDEO (BOTTOM) */}
                     <video
                         ref={videoRef}
-                        className="w-full h-auto max-h-96"
+
                         autoPlay
                         playsInline
                         muted
-                        style={{ display: streaming ? "block" : "none" }}
+                        style={{
+                            opacity: streaming ? 1 : 0,
+
+                            position: 'absolute',
+                            top: "0px",
+                            zIndex: -1
+                        }}
                     />
 
+                    {/* CANVAS (MIDDLE) */}
                     {showCanvas && (
                         <canvas
                             ref={canvasRef}
-                            id="pose-output"
-                            className="absolute inset-0 w-full h-full pointer-events-none"
+                            style={{
+                                position: 'absolute',
+                                top: "0px",
+                                zIndex: 4
+                            }}
                         />
                     )}
 
+                    {/* DIV OVERLAY (TOP) */}
                     {!streaming && (
-                        <div className="p-6 text-center text-sm text-slate-500">Camera is off — press Start Camera</div>
+                        <div className="overlay">
+                            Camera is off — press Start Camera
+                        </div>
                     )}
                 </div>
 
